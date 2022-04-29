@@ -1,0 +1,54 @@
+client-VPN:
+
+a. launch a public instance in that instance we need to create certificate by using below commands
+
+1.install git package
+yum install git-all
+
+2.Clone Easy RSA Git Repo
+git clone https://github.com/OpenVPN/easy-rsa.git
+
+cd easy-rsa/easyrsa3
+
+3.Initialize Public Key Infrastructure (PKI)
+./easyrsa init-pki
+
+4. Build Certificate Authority
+./easyrsa build-ca nopass
+
+5. Build Server Certificate
+./easyrsa build-server-full clientvpndemo.com nopass
+
+6. Build Client Certificate
+./easyrsa build-client-full pdomala.clientvpndemo.com nopass
+
+mkdir acm 
+
+cp pki/ca.crt acm
+cp pki/issued/clientvpndemo.com.crt acm
+cp pki/issued/pdomala.clientvpndemo.com.crt acm
+cp pki/private/clientvpndemo.com.key acm
+cp pki/private/pdomala.clientvpndemo.com.key acm
+cd acm
+
+aws configure ( Provide access key and secret key)
+
+7. Mention the correct Region code in below command:
+
+aws acm import-certificate --certificate fileb://clientvpndemo.com.crt --private-key fileb://clientvpndemo.com.key --certificate-chain fileb://ca.crt --region  ap-south-1
+aws acm import-certificate --certificate fileb://pdomala.clientvpndemo.com.crt --private-key fileb://pdomala.clientvpndemo.com.key --certificate-chain fileb://ca.crt --region ap-south-1
+
+upto here we completed creating certificates,now we need to copy those certificate details in ACM(amazon certificate manager)
+
+b.we need to connect to the backend infrastructure for that use
+
+8.aws configure (here we need configure access & private key) and push keys to ACM using above commands
+
+c.now create client VPN end point and associate subnet to it(we need to associate only to which subnet client want to connect through vpn connection)
+
+d.now download AWS client vpn through internet. 
+
+e.create new profile & add configuration files into server using below commands
+
+switch to ec2-user > cd easy-rsa > cd easyrsa3 > cd acm >
+
