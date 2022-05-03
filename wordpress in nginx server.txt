@@ -1,0 +1,65 @@
+how to install wordpress on nginx web server in ubuntu 
+ 1.install nginx server
+sudo apt update
+sudo apt upgrade
+sudo apt install nginx
+sudo systmctl start nginx
+sudo systumctl status nginx
+
+Install mysql database in nginx
+sudo apt install mysql-server mysql-clint -y
+sudo systemctl start mysql
+sudo systemctl status mysql
+sudo systemctl enable mysql
+sudo systemctl enable nginx
+sudo mysql_secure_installation
+set the password for database 
+there are three level of password validation policy:
+please enter 0=low,1=medim,2=strong:?
+newpassword:
+re-enter new password:
+do you wish to continue with the password provided(press y/y),any other key for no):
+remove anonamous users?press y/y for yes/any other key for no):
+disallow root login remotely?press y/y for yes, any other key for no):
+remove test database and access to it?press y/y for yes, any other key for no):
+reload privilege tables now?press y/y for yes, any other key for no):
+
+create wordpress database and user 
+sudo mysql -u root -p
+mysql> create database wordpress;
+mysql>create user "wpuser"@"localhost" identified by "password";
+mysql>grant all privileges on wordpress.*  to 'wpuser'@'localhost';
+mysql>flush privileges;
+mysql>exit;
+sudo apt install php7.4 php7.4-gd php7.4-mysql php7.4-zip php7.4-fpm -y
+sudo wget http://wordpress.org/latest.zip(copied wordpress download link from chrome )
+ls
+sudo apt install unzip
+sudo unzip latest.zip
+ls
+sudo wordpress/
+ls
+sudo cp  -r * /var/www/html/
+sudo chown -R www-data:www-data /var/www/html/
+sudo systemctl restart nginx
+sudo cd /etc/nginx/sites-enabled/
+ls
+sudo cp default wordpress
+ls
+sudo nano wordpress
+sudo systemctl restart nginx 
+sudo nginx -t
+
+<In the website wordpress page
+change the username:wpadmin
+password:wpadminpass
+then click on the submit
+run the installation.
+Give the 
+site title:Andriod and Tech Solutions
+username:admin
+password:password
+your email:
+Install wordpress
+login
+>
